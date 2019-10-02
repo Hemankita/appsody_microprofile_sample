@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: java-microprofile-test-build-deploy-pipeline
+  name: java-microprofile-hema-test-build-deploy-pipeline
 spec:
   resources:
     - name: git-source
@@ -10,9 +10,20 @@ spec:
     - name: docker-image
       type: image
   tasks:
+    - name: test-task
+      taskRef:
+        name: java-microprofile-test-task
+      resources:
+        inputs:
+        - name: git-source
+          resource: git-source
+        outputs:
+        - name: docker-image
+          resource: docker-image
     - name: build-task
       taskRef:
-        name: java-microprofile-test-build-task
+        name: java-microprofile-build-task
+      runAfter: [test-task]
       resources:
         inputs:
         - name: git-source
