@@ -12,12 +12,14 @@ spec:
         default: /workspace/extracted/Dockerfile
       - name: pathToContext
         default: /workspace/extracted
+      - name: pathToGitSource
+        default: /workspace/git-source
   outputs:
     resources:
       - name: docker-image
         type: image
   steps:
-    - name: assemble-extract
+    - name: test
       securityContext:
         privileged: true
       image: kabanero/java-microprofile:0.2
@@ -25,14 +27,8 @@ spec:
         [
           "/bin/bash",
           "-c",
-          "ls",
+          "ln -s ${inputs.params.pathToGitSource} ${inputs.params.pathToContext} && cd ${inputs.params.pathToContext} && pwd && ls && $APPSODY_TEST",
         ]
       env:
         - name: gitsource
           value: git-source
-      volumeMounts:
-        - mountPath: /var/lib/containers
-          name: varlibcontainers
-  volumes:
-    - name: varlibcontainers
-      emptyDir: {}

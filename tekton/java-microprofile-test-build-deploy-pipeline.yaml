@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: java-microprofile-hema-test-build-deploy-pipeline
+  name: java-microprofile-test-build-deploy-pipeline
 spec:
   resources:
     - name: git-source
